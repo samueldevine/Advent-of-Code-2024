@@ -2,11 +2,12 @@ import java.io.File
 import kotlin.math.abs
 
 fun main() {
-    var list1 = mutableListOf<Int>()
-    var list2 = mutableListOf<Int>()
+    val list1 = mutableListOf<Int>()
+    val list2 = mutableListOf<Int>()
 
     val file = File("data/01.txt")
 
+    // Populate each list with the values from each column
     file.forEachLine { line ->
         val columns = line.trim().split(Regex("\\s{1,}"))
 
@@ -17,11 +18,14 @@ fun main() {
     list1.sort()
     list2.sort()
 
-    var sum = 0
+    var sumOfDistances = 0
+    var similarityScore = 0
 
-    list1.forEachIndexed { index, _ ->
-        sum += abs(list1[index] - list2[index])
+    list1.forEachIndexed { index, value ->
+        sumOfDistances += abs(list1[index] - list2[index])
+        similarityScore += (value * list2.count { it == value })
     }
 
-    println("Total Distance: $sum")
+    println("Total Distance: $sumOfDistances")
+    println("Similarity Score: $similarityScore")
 }
