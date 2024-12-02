@@ -2,17 +2,15 @@ import java.io.File
 
 fun main() {
     val input = File("data/02.txt")
-    var safe: Int = 0
+    var safe = 0
 
     var lineNumber = 0
     input.forEachLine { report ->
         lineNumber++
-        var reportSafe: Boolean = true
+        var reportSafe = true
         val strLevels: List<String> = report.split(" ")
         val levels = strLevels.map { it.toInt() }
-
-        var increasing: Boolean
-        increasing = if (levels[0] > levels[1]) false else true
+        val increasing: Boolean = levels[0] <= levels[1]
 
         for (i in levels.indices) {
             if (i == 0) continue // skip first level
