@@ -1,3 +1,6 @@
+### data files ###
+data/
+
 ### IntelliJ IDEA ###
 out/
 !**/src/main/**/out/
