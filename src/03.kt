@@ -13,23 +13,27 @@ fun addValidMultiplicationsPart1(section: String): Long {
     }
 }
 
-fun addValidMultiplicationsPart2(fullMemory: String): Long {
-    var sum = 0L
+fun addValidMultiplicationsPart2(lines: List<String>): Long {
+    val fullRegex = """$mulRegex|$doRegex|$dontRegex|""".toRegex()
+    val all : List<String> = lines.flatMap { string : String ->
+        fullRegex.findAll(string).map { it.value }
+    }
+    println(all)
     var enabled = true
-    """$mulRegex|$doRegex|$dontRegex|""".toRegex().findAll(fullMemory).forEach { match : MatchResult ->
-        when (match.value) {
-            "don't()" -> enabled = false
-            "do()" -> enabled = true
-            else -> if (enabled) sum += match.multiplyNumbers()
+    var sum = 0L
+    for (instruction : String in all) {
+        when {
+            instruction == "don't()" -> enabled = false
+            instruction == "do()" -> enabled = true
+            enabled && instruction.startsWith("mul(") -> {
+                val (a : String, b : String) = instruction
+                    .removeSurrounding("mul(", ")")
+                    .split(',')
+                sum += a.toInt() * b.toInt()
+            }
         }
     }
     return sum
-}
-
-private fun MatchResult.multiplyNumbers(): Long {
-    val (first : String, second : String) = destructured
-    return first.toLong() * second.toLong()
-
 }
 
 fun main() {
@@ -38,10 +42,11 @@ fun main() {
     }
 
     fun part2(input: List<String>): Long {
-        return addValidMultiplicationsPart2(input.joinToString())
+        return addValidMultiplicationsPart2(input)
     }
 
     val input = readInput("03")
+
     println(part1(input))
     println(part2(input))
 }
